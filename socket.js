@@ -16,25 +16,20 @@ app.get('/', (req, res) => { res.send('<h1>Sockets its working</h1>') });
 
 
 io.on('connection', (socket) => {
+    socket.on('join', (data) => {
+        socket.join(data.Session);
+        socket.broadcast.to(data.Session).emit('user joined');
+    });
 
-    //Message Sockets
-    socket.on('typing', (UserName) => {
-        socket.emit('response', UserName)
+    socket.on('message', (data) => {
+        io.in(data.SessionID).emit('new message', data)
     })
 
-    socket.on('newMessage', (newMessage) => {
-        io.emit('newMessage', newMessage)
-    })
-
-
-    //Disconnected User
+    //disconnected
     socket.on('disconnect', () => {
-        console.log("a user its disconnected");
     });
 });
 
-
-
-server.listen(5050, function () {
-    console.log('sockets running on port:', 5050);
+server.listen(5000, function () {
+    console.log('sockets running on port:', 5000);
 });
