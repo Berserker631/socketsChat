@@ -1,6 +1,8 @@
 # Created by https://www.toptal.com/developers/gitignore/api/node,angular
 # Edit at https://www.toptal.com/developers/gitignore?templates=node,angular
 /node_modules
+node_modules
+node_modules/
 ### Angular ###
 ## Angular ##
 # compiled output
