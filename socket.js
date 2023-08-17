@@ -28,13 +28,11 @@ io.on("connection", (socket) => {
       });
     }
     //send all online users to new user
-    console.log(onlineUsers);
     io.emit('get users', onlineUsers)
   })
 
   socket.on('disconnect', () =>{
     onlineUsers = onlineUsers.filter((user) => user.socketID !== socket.id)
-    console.log(onlineUsers);
     //send all online users to all users
     io.emit('get users', onlineUsers)
   });
