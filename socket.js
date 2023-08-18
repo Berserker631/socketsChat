@@ -13,7 +13,7 @@ const io = require("socket.io")(server, {
 let onlineUsers = [];
 
 app.use(cors());
-
+ 
 app.get("/", (req, res) => {
   res.send("<h1>Sockets its working</h1>");
 });
@@ -21,9 +21,9 @@ app.get("/", (req, res) => {
 io.on("connection", (socket) => {
   socket.on('new user', (newUser) =>{
     //Online user status
-    if (!onlineUsers.some((user) => user.UserID === newUser)) { //if user is already in the array
+    if (!onlineUsers.some((user) => user.idUser === newUser)) { //if user is already in the array
       onlineUsers.push({
-        UserID: newUser,
+        idUser: newUser,
         socketID: socket.id
       });
     }
@@ -36,7 +36,6 @@ io.on("connection", (socket) => {
     //send all online users to all users
     io.emit('get users', onlineUsers)
   });
-
   // socket.on("offline", () =>{
   //   //remove user from active users
   //   onlineUsers = onlineUsers.filter((user) => user.socketID !== socket.id);
@@ -47,13 +46,13 @@ io.on("connection", (socket) => {
 
   //Join a private chat room
   socket.on("join", (data) => {
-    socket.join(data.Session);
-    socket.broadcast.to(data.Session).emit("user joined");
+    socket.join(data.idSession);
+    socket.broadcast.to(data.idSession).emit("user joined");
   });
 
   //Message Sockets
   socket.on('new message', (data)=>{
-   socket.to(data.SessionID).emit('get message',data)
+   socket.to(data.idSession).emit('get message',data)
   })
 
 })
